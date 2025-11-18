@@ -901,6 +901,16 @@ namespace abb
       bool uploadFile(const RWSClient::FileResource &resource, const std::string &file_content);
 
       /**
+       * \brief A method for posting a file to the robot controller.
+       *
+       * \param resource specifying the file's directory and name.
+       * \param file_content for the file's content.
+       *
+       * \return bool indicating if the communication was successful or not.
+       */
+      bool httpPost(const std::string &resource, const std::string &file_content);
+
+      /**
        * \brief A method for deleting a file from the robot controller.
        *
        * \param resource specifying the file's directory and name.

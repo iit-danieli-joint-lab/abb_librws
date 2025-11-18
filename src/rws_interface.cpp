@@ -1070,6 +1070,17 @@ namespace abb
       return rws_client_.uploadFile(resource, file_content).success;
     }
 
+    bool RWSInterface::httpPost(const std::string &resource, const std::string &post_data)
+    {
+      POCOClient::POCOResult result = rws_client_.httpPost(resource, post_data);
+
+      if (result.status != POCOClient::POCOResult::OK)
+      {
+        return false;
+      }
+      return true;
+    }
+
     bool RWSInterface::deleteFile(const RWSClient::FileResource &resource)
     {
       return rws_client_.deleteFile(resource).success;
