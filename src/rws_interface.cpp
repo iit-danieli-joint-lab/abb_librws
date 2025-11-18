@@ -918,30 +918,37 @@ namespace abb
       {
         std::string name = xmlFindTextContent(node_list.at(i), XMLAttributes::CLASS_NAME);
         bool is_motion_task = xmlFindTextContent(node_list.at(i), XMLAttributes::CLASS_MOTIONTASK) == RAPID::RAPID_TRUE;
-        bool is_active = xmlFindTextContent(node_list.at(i), XMLAttributes::CLASS_ACTIVE) == "On";
-        std::string temp = xmlFindTextContent(node_list.at(i), XMLAttributes::CLASS_EXCSTATE);
+        if (rws_client_.getRWSVersion() == RWSVersion::RWS1)
+        {
+          bool is_active = xmlFindTextContent(node_list.at(i), XMLAttributes::CLASS_ACTIVE) == "On";
+          std::string temp = xmlFindTextContent(node_list.at(i), XMLAttributes::CLASS_EXCSTATE);
 
-        // Assume task state is unknown, update based on contents of 'temp'.
-        RAPIDTaskExecutionState execution_state = UNKNOWN;
+          // Assume task state is unknown, update based on contents of 'temp'.
+          RAPIDTaskExecutionState execution_state = UNKNOWN;
 
-        if (temp == "read")
-        {
-          execution_state = READY;
-        }
-        else if (temp == "stop")
-        {
-          execution_state = STOPPED;
-        }
-        else if (temp == "star")
-        {
-          execution_state = STARTED;
-        }
-        else if (temp == "unin")
-        {
-          execution_state = UNINITIALIZED;
-        }
+          if (temp == "read")
+          {
+            execution_state = READY;
+          }
+          else if (temp == "stop")
+          {
+            execution_state = STOPPED;
+          }
+          else if (temp == "star")
+          {
+            execution_state = STARTED;
+          }
+          else if (temp == "unin")
+          {
+            execution_state = UNINITIALIZED;
+          }
 
-        result.push_back(RAPIDTaskInfo(name, is_motion_task, is_active, execution_state));
+          result.push_back(RAPIDTaskInfo(name, is_motion_task, is_active, execution_state));
+        }
+        else
+        {
+          result.push_back(RAPIDTaskInfo(name, is_motion_task));
+        }
       }
 
       return result;
@@ -971,7 +978,7 @@ namespace abb
 
       std::vector<Poco::XML::Node *> node_list = xmlFindNodes(rws_result.p_xml_document, XMLAttributes::CLASS_SYS_SYSTEM_LI);
 
-      if (node_list.empty() && rws_client_.getRWSVersion() == RWSVersion::RWS1)
+      if (node_list.empty() && rws_client_.getRWSVersion() == RWSVersion::RWS2)
       {
         const XMLAttribute SYS_SYSTEM{"class", "sys-system"};
         node_list = xmlFindNodes(rws_result.p_xml_document, SYS_SYSTEM);
@@ -983,7 +990,7 @@ namespace abb
         result.robot_ware_version = xmlFindTextContent(node_list.at(i), XMLAttributes::CLASS_RW_VERSION_NAME);
       }
 
-      if (rws_client_.getRWSVersion() == RWSVersion::RWS2)
+      if (rws_client_.getRWSVersion() == RWSVersion::RWS1)
       {
         node_list = xmlFindNodes(rws_result.p_xml_document, XMLAttributes::CLASS_SYS_OPTION_LI);
         for (size_t i = 0; i < node_list.size(); ++i)
@@ -991,8 +998,7 @@ namespace abb
           result.system_options.push_back(xmlFindTextContent(node_list.at(i), XMLAttributes::CLASS_OPTION));
         }
 
-        result.system_type = xmlFindTextContent(rws_client_.getContollerService().p_xml_document,
-                                                XMLAttributes::CLASS_CTRL_TYPE);
+        result.system_type = xmlFindTextContent(rws_client_.getContollerService().p_xml_document, XMLAttributes::CLASS_CTRL_TYPE);
       }
       return result;
     }

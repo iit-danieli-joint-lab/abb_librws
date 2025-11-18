@@ -191,47 +191,39 @@ namespace abb
     {
       std::string uri = generateMechanicalUnitPath(mechunit) + Resources::ROBTARGET;
 
-      std::string args = "";
-      if (!tool.empty())
+      if (getRWSVersion() == RWSVersion::RWS1)
       {
-        args += "&tool=" + tool;
+        std::string args = "";
+        if (!tool.empty())
+        {
+          args += "&tool=" + tool;
+        }
+        if (!wobj.empty())
+        {
+          args += "&wobj=" + wobj;
+        }
+
+        const std::string coordinate_arg = "?coordinate=";
+        switch (coordinate)
+        {
+        case BASE:
+          uri += coordinate_arg + SystemConstants::General::COORDINATE_BASE + args;
+          break;
+        case WORLD:
+          uri += coordinate_arg + SystemConstants::General::COORDINATE_WORLD + args;
+          break;
+        case TOOL:
+          uri += coordinate_arg + SystemConstants::General::COORDINATE_TOOL + args;
+          break;
+        case WOBJ:
+          uri += coordinate_arg + SystemConstants::General::COORDINATE_WOBJ + args;
+          break;
+        default:
+          // If the "ACTIVE" enumeration is passed in (or any other non-identified value),
+          // do not add any arguments to this command
+          break;
+        }
       }
-      if (!wobj.empty())
-      {
-        args += "&wobj=" + wobj;
-      }
-
-      const std::string coordinate_arg = "?coordinate=";
-      switch (coordinate)
-      {
-      case BASE:
-        uri += coordinate_arg + SystemConstants::General::COORDINATE_BASE + args;
-        break;
-      case WORLD:
-        uri += coordinate_arg + SystemConstants::General::COORDINATE_WORLD + args;
-        break;
-      case TOOL:
-        uri += coordinate_arg + SystemConstants::General::COORDINATE_TOOL + args;
-        break;
-      case WOBJ:
-        uri += coordinate_arg + SystemConstants::General::COORDINATE_WOBJ + args;
-        break;
-      default:
-        // If the "ACTIVE" enumeration is passed in (or any other non-identified value),
-        // do not add any arguments to this command
-        break;
-      }
-
-      EvaluationConditions evaluation_conditions;
-      evaluation_conditions.parse_message_into_xml = true;
-      evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_OK);
-
-      return evaluatePOCOResult(httpGet(uri), evaluation_conditions);
-    }
-
-    RWSClient::RWSResult RWSClient::getMechanicalUnitRobTarget(const std::string mechunit)
-    {
-      std::string uri = generateMechanicalUnitPath(mechunit) + Resources::ROBTARGET;
 
       EvaluationConditions evaluation_conditions;
       evaluation_conditions.parse_message_into_xml = true;

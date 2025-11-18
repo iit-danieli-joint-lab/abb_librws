@@ -478,15 +478,6 @@ namespace abb
        * \brief A method for retrieving the current robtarget values of a mechanical unit.
        *
        * \param mechunit for the mechanical unit's name.
-       *
-       * \return RWSResult containing the result.
-       */
-      RWSResult getMechanicalUnitRobTarget(const std::string mechunit);
-
-      /**
-       * \brief A method for retrieving the current robtarget values of a mechanical unit.
-       *
-       * \param mechunit for the mechanical unit's name.
        * \param coordinate for the coordinate mode (base, world, tool, or wobj) in which the robtarget will be reported.
        * \param tool for the tool frame relative to which the robtarget will be reported.
        * \param wobj for the work object (wobj) relative to which the robtarget will be reported.
