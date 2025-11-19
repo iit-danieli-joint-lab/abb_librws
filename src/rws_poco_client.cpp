@@ -337,9 +337,13 @@ namespace abb
       {
         cookies_.clear();
         if (rws_version_ == RWSVersion::RWS1)
+        {
           http_client_session_.reset();
+        }
         else if (rws_version_ == RWSVersion::RWS2)
+        {
           https_client_session_.reset();
+        }
       }
 
       return result;
@@ -417,9 +421,13 @@ namespace abb
       if (result.status != POCOResult::OK)
       {
         if (rws_version_ == RWSVersion::RWS1)
+        {
           http_client_session_.reset();
+        }
         else if (rws_version_ == RWSVersion::RWS2)
+        {
           https_client_session_.reset();
+        }
       }
 
       return result;
@@ -502,9 +510,13 @@ namespace abb
       if (result.status != POCOResult::OK)
       {
         if (rws_version_ == RWSVersion::RWS1)
+        {
           http_client_session_.reset();
+        }
         else if (rws_version_ == RWSVersion::RWS2)
+        {
           https_client_session_.reset();
+        }
       }
 
       return result;

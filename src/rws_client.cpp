@@ -87,7 +87,7 @@ namespace abb
       {
         resource_uri = Resources::RW_RAPID_SYMBOL_DATA_RAPID_1_0;
       }
-      else
+      else if (version == RWSVersion::RWS2)
       {
         resource_uri = Resources::RW_RAPID_SYMBOL_DATA_RAPID_2_0;
       }
@@ -260,7 +260,7 @@ namespace abb
       {
         uri = Resources::RW_RAPID_MODULES + "?" + Queries::TASK + task;
       }
-      else
+      else if (getRWSVersion() == RWSVersion::RWS2)
       {
         uri = Resources::RW_RAPID_TASKS + "/" + task + Resources::MODULES;
       }
@@ -393,7 +393,7 @@ namespace abb
       {
         uri += "?" + Queries::ACTION_SET;
       }
-      else
+      else if (getRWSVersion() == RWSVersion::RWS2)
       {
         std::string set = Queries::ACTION_SET;
         // remove "action=" for RWS 2.0
@@ -437,7 +437,7 @@ namespace abb
       {
         uri += "?" + Queries::ACTION_START;
       }
-      else
+      else if (getRWSVersion() == RWSVersion::RWS2)
       {
         std::string start = Queries::ACTION_START;
         // remove "action=" for RWS 2.0
@@ -460,7 +460,7 @@ namespace abb
       {
         uri += "?" + Queries::ACTION_STOP;
       }
-      else
+      else if (getRWSVersion() == RWSVersion::RWS2)
       {
         std::string stop = Queries::ACTION_STOP;
         // remove "action=" for RWS 2.0
@@ -483,7 +483,7 @@ namespace abb
       {
         uri += "?" + Queries::ACTION_RESETPP;
       }
-      else
+      else if (getRWSVersion() == RWSVersion::RWS2)
       {
         std::string resetpp = Queries::ACTION_RESETPP;
         // remove "action=" for RWS 2.0
@@ -660,7 +660,16 @@ namespace abb
           EvaluationConditions evaluation_conditions;
           evaluation_conditions.parse_message_into_xml = false;
           evaluation_conditions.accepted_outcomes.push_back(HTTPResponse::HTTP_SWITCHING_PROTOCOLS);
-          const std::string protocol = (getRWSVersion() == RWSVersion::RWS1) ? "robapi2_subscription" : "rws_subscription";
+          std::string temp_protocol;
+          if (getRWSVersion() == RWSVersion::RWS1)
+          {
+            temp_protocol = "robapi2_subscription";
+          }
+          else if (getRWSVersion() == RWSVersion::RWS2)
+          {
+            temp_protocol = "rws_subscription";
+          }
+          const std::string protocol = temp_protocol;
           result = evaluatePOCOResult(webSocketConnect(poll, protocol, DEFAULT_SUBSCRIPTION_TIMEOUT),
                                       evaluation_conditions);
 
@@ -914,7 +923,7 @@ namespace abb
       {
         return Resources::RW_RAPID_SYMBOL_DATA_RAPID_1_0 + "/" + resource.task + "/" + resource.module + "/" + resource.name;
       }
-      else
+      else if (getRWSVersion() == RWSVersion::RWS2)
       {
         return Resources::RW_RAPID_SYMBOL_DATA_RAPID_2_0 + "/" + resource.task + "/" + resource.module + "/" + resource.name + "/data";
       }
@@ -926,7 +935,7 @@ namespace abb
       {
         return Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID_1_0 + "/" + resource.task + "/" + resource.module + "/" + resource.name;
       }
-      else
+      else if (getRWSVersion() == RWSVersion::RWS2)
       {
         return Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID_2_0 + "/" + resource.task + "/" + resource.module + "/" + resource.name + "/properties";
       }
