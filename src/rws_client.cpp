@@ -79,9 +79,19 @@ namespace abb
     }
 
     void RWSClient::SubscriptionResources::addRAPIDPersistantVariable(const RAPIDResource &resource,
-                                                                      const Priority priority)
+                                                                      const Priority priority,
+                                                                      const RWSVersion version)
     {
-      std::string resource_uri = Resources::RW_RAPID_SYMBOL_DATA_RAPID;
+      std::string resource_uri;
+      if (version == RWSVersion::RWS1)
+      {
+        resource_uri = Resources::RW_RAPID_SYMBOL_DATA_RAPID_1_0;
+      }
+      else
+      {
+        resource_uri = Resources::RW_RAPID_SYMBOL_DATA_RAPID_2_0;
+      }
+
       resource_uri += "/";
       resource_uri += resource.task;
       resource_uri += "/";
@@ -385,7 +395,10 @@ namespace abb
       }
       else
       {
-        uri += "/" + Queries::ACTION_SET;
+        std::string set = Queries::ACTION_SET;
+        // remove "action=" for RWS 2.0
+        set.erase(0, 7);
+        uri += "/" + set;
       }
       std::string content = Identifiers::LVALUE + "=" + value;
 
@@ -426,7 +439,10 @@ namespace abb
       }
       else
       {
-        uri += "/" + Queries::ACTION_START;
+        std::string start = Queries::ACTION_START;
+        // remove "action=" for RWS 2.0
+        start.erase(0, 7);
+        uri += "/" + start;
       }
       std::string content = "regain=continue&execmode=continue&cycle=forever&condition=none&stopatbp=disabled&alltaskbytsp=false";
 
@@ -446,7 +462,10 @@ namespace abb
       }
       else
       {
-        uri += "/" + Queries::ACTION_STOP;
+        std::string stop = Queries::ACTION_STOP;
+        // remove "action=" for RWS 2.0
+        stop.erase(0, 7);
+        uri += "/" + stop;
       }
       std::string content = "stopmode=stop";
 
@@ -466,7 +485,10 @@ namespace abb
       }
       else
       {
-        uri += "/" + Queries::ACTION_RESETPP;
+        std::string resetpp = Queries::ACTION_RESETPP;
+        // remove "action=" for RWS 2.0
+        resetpp.erase(0, 7);
+        uri += "/" + resetpp;
       }
       EvaluationConditions evaluation_conditions;
       evaluation_conditions.parse_message_into_xml = false;
@@ -740,7 +762,8 @@ namespace abb
 
     RWSClient::RWSResult RWSClient::requestMasterShip()
     {
-      std::string uri = Resources::RW_MASTERSHIP + "/" + Queries::ACTION_REQUEST;
+      // Request mastership (function only available in RWS 2.0)
+      std::string uri = Resources::RW_MASTERSHIP_2_0 + "/" + Queries::ACTION_REQUEST;
 
       EvaluationConditions evaluation_conditions;
       evaluation_conditions.parse_message_into_xml = false;
@@ -751,7 +774,8 @@ namespace abb
 
     RWSClient::RWSResult RWSClient::releaseMasterShip()
     {
-      std::string uri = Resources::RW_MASTERSHIP + "/" + Queries::ACTION_RELEASE;
+      // Release mastership (function only available in RWS 2.0)
+      std::string uri = Resources::RW_MASTERSHIP_2_0 + "/" + Queries::ACTION_RELEASE;
 
       EvaluationConditions evaluation_conditions;
       evaluation_conditions.parse_message_into_xml = false;
@@ -886,12 +910,26 @@ namespace abb
 
     std::string RWSClient::generateRAPIDDataPath(const RAPIDResource &resource)
     {
-      return Resources::RW_RAPID_SYMBOL_DATA_RAPID + "/" + resource.task + "/" + resource.module + "/" + resource.name;
+      if (getRWSVersion() == RWSVersion::RWS1)
+      {
+        return Resources::RW_RAPID_SYMBOL_DATA_RAPID_1_0 + "/" + resource.task + "/" + resource.module + "/" + resource.name;
+      }
+      else
+      {
+        return Resources::RW_RAPID_SYMBOL_DATA_RAPID_2_0 + "/" + resource.task + "/" + resource.module + "/" + resource.name + "/data";
+      }
     }
 
     std::string RWSClient::generateRAPIDPropertiesPath(const RAPIDResource &resource)
     {
-      return Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID + "/" + resource.task + "/" + resource.module + "/" + resource.name;
+      if (getRWSVersion() == RWSVersion::RWS1)
+      {
+        return Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID_1_0 + "/" + resource.task + "/" + resource.module + "/" + resource.name;
+      }
+      else
+      {
+        return Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID_2_0 + "/" + resource.task + "/" + resource.module + "/" + resource.name + "/properties";
+      }
     }
 
     std::string RWSClient::generateFilePath(const FileResource &resource)

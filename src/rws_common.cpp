@@ -229,10 +229,10 @@ namespace abb
     const std::string SystemConstants::General::MECHANICAL_UNIT_ROB_L = "ROB_L";
     const std::string SystemConstants::General::MECHANICAL_UNIT_ROB_R = "ROB_R";
     const std::string SystemConstants::General::REMOTE = "remote";
-    const std::string SystemConstants::General::COORDINATE_BASE = "Base";
-    const std::string SystemConstants::General::COORDINATE_WORLD = "Word";
-    const std::string SystemConstants::General::COORDINATE_TOOL = "Tool";
-    const std::string SystemConstants::General::COORDINATE_WOBJ = "Wobj";
+    const std::string SystemConstants::General::COORDINATE_BASE = "base";
+    const std::string SystemConstants::General::COORDINATE_WORLD = "word";
+    const std::string SystemConstants::General::COORDINATE_TOOL = "tool";
+    const std::string SystemConstants::General::COORDINATE_WOBJ = "wobj";
 
     const std::string SystemConstants::IOSignals::HAND_ACTUAL_POSITION_L = "hand_ActualPosition_L";
     const std::string SystemConstants::IOSignals::HAND_ACTUAL_POSITION_R = "hand_ActualPosition_R";
@@ -279,7 +279,6 @@ namespace abb
     const std::string Identifiers::RAP_TASK_LI = "rap-task-li";
     const std::string Identifiers::ROBOT = "robot";
     const std::string Identifiers::RW_VERSION_NAME = "rwversionname";
-    const int Identifiers::RWS_VERSION = 1;
     const std::string Identifiers::SINGLE = "single";
     const std::string Identifiers::STATE = "state";
     const std::string Identifiers::SYS = "sys";
@@ -290,8 +289,8 @@ namespace abb
     const std::string Identifiers::VALUE = "value";
     const std::string Identifiers::CLASS = "class";
     const std::string Identifiers::OPTION = "option";
-    const std::string Queries::ACTION_RELEASE = "action=release";
-    const std::string Queries::ACTION_REQUEST = "action=request";
+    const std::string Queries::ACTION_RELEASE = "release"; // RWS 1.0 requires "action=release" but since it's not used we keep it simple
+    const std::string Queries::ACTION_REQUEST = "request"; // RWS 1.0 requires "action=request" but since it's not used we keep it simple
     const std::string Queries::ACTION_RESETPP = "action=resetpp";
     const std::string Queries::ACTION_SET = "action=set";
     const std::string Queries::ACTION_SETCTRLSTATE = "action=setctrlstate";
@@ -312,14 +311,17 @@ namespace abb
     const std::string Resources::MODULES = "/modules";
     const std::string Resources::RW_CFG = Services::RW + "/cfg";
     const std::string Resources::RW_IOSYSTEM_SIGNALS = Services::RW + "/iosystem/signals";
-    const std::string Resources::RW_MASTERSHIP = Services::RW + "/mastership";
+    const std::string Resources::RW_MASTERSHIP_1_0 = Services::RW + "/mastership";
+    const std::string Resources::RW_MASTERSHIP_2_0 = Services::RW + "/mastership/edit";
     const std::string Resources::RW_MOTIONSYSTEM_MECHUNITS = Services::RW + "/motionsystem/mechunits";
     const std::string Resources::RW_PANEL_CTRLSTATE = Services::RW + "/panel/ctrlstate";
     const std::string Resources::RW_PANEL_OPMODE = Services::RW + "/panel/opmode";
     const std::string Resources::RW_RAPID_EXECUTION = Services::RW + "/rapid/execution";
     const std::string Resources::RW_RAPID_MODULES = Services::RW + "/rapid/modules";
-    const std::string Resources::RW_RAPID_SYMBOL_DATA_RAPID = Services::RW + "/rapid/symbol/data/RAPID";
-    const std::string Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID = Services::RW + "/rapid/symbol/properties/RAPID";
+    const std::string Resources::RW_RAPID_SYMBOL_DATA_RAPID_1_0 = Services::RW + "/rapid/symbol/data/RAPID";
+    const std::string Resources::RW_RAPID_SYMBOL_DATA_RAPID_2_0 = Services::RW + "/rapid/symbol/RAPID";
+    const std::string Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID_1_0 = Services::RW + "/rapid/symbol/properties/RAPID";
+    const std::string Resources::RW_RAPID_SYMBOL_PROPERTIES_RAPID_2_0 = Services::RW + "/rapid/symbol/RAPID";
     const std::string Resources::RW_RAPID_TASKS = Services::RW + "/rapid/tasks";
     const std::string Resources::RW_SYSTEM = Services::RW + "/system";
 

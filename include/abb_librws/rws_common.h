@@ -649,11 +649,6 @@ namespace abb
           static const std::string RW_VERSION_NAME;
 
           /**
-           * \brief RobotWebServices version.
-           */
-          static const int RWS_VERSION;
-
-          /**
            * \brief Single.
            */
           static const std::string SINGLE;
@@ -829,7 +824,8 @@ namespace abb
           /**
            * \brief Mastership.
            */
-          static const std::string RW_MASTERSHIP;
+          static const std::string RW_MASTERSHIP_1_0;
+          static const std::string RW_MASTERSHIP_2_0;
 
           /**
            * \brief Mechanical units.
@@ -857,14 +853,16 @@ namespace abb
           static const std::string RW_RAPID_MODULES;
 
           /**
-           * \brief RAPID symbol data.
+           * \brief RAPID symbol data for RWS 1.0 and 2.0.
            */
-          static const std::string RW_RAPID_SYMBOL_DATA_RAPID;
+          static const std::string RW_RAPID_SYMBOL_DATA_RAPID_1_0;
+          static const std::string RW_RAPID_SYMBOL_DATA_RAPID_2_0;
 
           /**
-           * \brief RAPID symbol properties.
+           * \brief RAPID symbol properties for RWS 1.0 and 2.0.
            */
-          static const std::string RW_RAPID_SYMBOL_PROPERTIES_RAPID;
+          static const std::string RW_RAPID_SYMBOL_PROPERTIES_RAPID_1_0;
+          static const std::string RW_RAPID_SYMBOL_PROPERTIES_RAPID_2_0;
 
           /**
            * \brief RAPID tasks.

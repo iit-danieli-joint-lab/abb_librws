@@ -262,8 +262,10 @@ namespace abb
          *
          * \param resource specifying the RAPID task, module and symbol names for the RAPID resource.
          * \param priority for the priority of the subscription.
+         * \param version for the RWS version to use when constructing the resource URI.
          */
-        void addRAPIDPersistantVariable(const RAPIDResource &resource, const Priority priority);
+        void
+        addRAPIDPersistantVariable(const RAPIDResource &resource, const Priority priority, const RWSVersion version);
 
         /**
          * \brief A method for retrieving the contained subscription resources information.
