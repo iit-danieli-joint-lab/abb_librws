@@ -314,7 +314,8 @@ namespace abb
     const std::string Resources::RW_MASTERSHIP_1_0 = Services::RW + "/mastership";
     const std::string Resources::RW_MASTERSHIP_2_0 = Services::RW + "/mastership/edit";
     const std::string Resources::RW_MOTIONSYSTEM_MECHUNITS = Services::RW + "/motionsystem/mechunits";
-    const std::string Resources::RW_PANEL_CTRLSTATE = Services::RW + "/panel/ctrlstate";
+    const std::string Resources::RW_PANEL_CTRLSTATE_1_0 = Services::RW + "/panel/ctrlstate";
+    const std::string Resources::RW_PANEL_CTRLSTATE_2_0 = Services::RW + "/panel/ctrl-state";
     const std::string Resources::RW_PANEL_OPMODE = Services::RW + "/panel/opmode";
     const std::string Resources::RW_RAPID_EXECUTION = Services::RW + "/rapid/execution";
     const std::string Resources::RW_RAPID_MODULES = Services::RW + "/rapid/modules";

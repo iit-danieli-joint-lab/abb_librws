@@ -835,7 +835,8 @@ namespace abb
           /**
            * \brief Panel controller state.
            */
-          static const std::string RW_PANEL_CTRLSTATE;
+          static const std::string RW_PANEL_CTRLSTATE_1_0;
+          static const std::string RW_PANEL_CTRLSTATE_2_0;
 
           /**
            * \brief Panel operation mode.

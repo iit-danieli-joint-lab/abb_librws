@@ -306,7 +306,15 @@ namespace abb
 
     RWSClient::RWSResult RWSClient::getPanelControllerState()
     {
-      std::string uri = Resources::RW_PANEL_CTRLSTATE;
+      std::string uri;
+      if (getRWSVersion() == RWSVersion::RWS1)
+      {
+        uri = Resources::RW_PANEL_CTRLSTATE_1_0;
+      }
+      else if (getRWSVersion() == RWSVersion::RWS2)
+      {
+        uri = Resources::RW_PANEL_CTRLSTATE_2_0;
+      }
 
       EvaluationConditions evaluation_conditions;
       evaluation_conditions.parse_message_into_xml = true;
@@ -499,10 +507,15 @@ namespace abb
 
     RWSClient::RWSResult RWSClient::setMotorsOn()
     {
-      std::string uri = Resources::RW_PANEL_CTRLSTATE;
+      std::string uri;
       if (getRWSVersion() == RWSVersion::RWS1)
       {
+        uri = Resources::RW_PANEL_CTRLSTATE_1_0;
         uri += "?" + Queries::ACTION_SETCTRLSTATE;
+      }
+      else if (getRWSVersion() == RWSVersion::RWS2)
+      {
+        uri = Resources::RW_PANEL_CTRLSTATE_2_0;
       }
       std::string content = "ctrl-state=motoron";
 
@@ -515,10 +528,15 @@ namespace abb
 
     RWSClient::RWSResult RWSClient::setMotorsOff()
     {
-      std::string uri = Resources::RW_PANEL_CTRLSTATE;
+      std::string uri;
       if (getRWSVersion() == RWSVersion::RWS1)
       {
+        uri = Resources::RW_PANEL_CTRLSTATE_1_0;
         uri += "?" + Queries::ACTION_SETCTRLSTATE;
+      }
+      else if (getRWSVersion() == RWSVersion::RWS2)
+      {
+        uri = Resources::RW_PANEL_CTRLSTATE_2_0;
       }
       std::string content = "ctrl-state=motoroff";
 
