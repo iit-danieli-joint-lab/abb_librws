@@ -1,6 +1,9 @@
 /***********************************************************************************************************************
  *
- * Copyright (c) 2015, ABB Schweiz AG
+ * Copyright (c) 
+ * 2015, ABB Schweiz AG
+ * 2021, JOiiNT LAB, Fondazione Istituto Italiano di Tecnologia, Intellimech Consorzio per la Meccatronica.
+ * 2025, IIT-Danieli Joint Lab, Fondazione Istituto Italiano di Tecnologia.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with
