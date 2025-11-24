@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
+set(CMAKE_CXX_STANDARD 17)
 
 # Read version from the package.xml file.
 file(READ ${CMAKE_CURRENT_SOURCE_DIR}/package.xml package_xml_str)
@@ -23,7 +24,7 @@ endif()
 ## POCO C++ Libraries ##
 ########################
 # We need at least 1.4.3 because of WebSocket support.
-find_package(Poco 1.4.3 REQUIRED COMPONENTS Foundation Net Util XML)
+find_package(Poco 1.4.3 REQUIRED COMPONENTS Foundation Net Util XML Crypto NetSSL)
 
 ###########
 ## Build ##
@@ -51,7 +52,7 @@ generate_export_header(${PROJECT_NAME})
 target_include_directories(${PROJECT_NAME} PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include;${CMAKE_CURRENT_BINARY_DIR}>"
   $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>
-  ${Poco_INCLUDE_DIRS}
+  PRIVATE ${Poco_INCLUDE_DIRS}
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC

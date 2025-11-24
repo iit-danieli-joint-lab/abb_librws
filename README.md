@@ -1,28 +1,58 @@
 # abb_librws
 
-[![Build Status: Ubuntu Bionic (Actions)](https://github.com/ros-industrial/abb_librws/workflows/CI%20-%20Ubuntu%20Bionic/badge.svg?branch=master)](https://github.com/ros-industrial/abb_librws/actions?query=workflow%3A%22CI+-+Ubuntu+Bionic%22)
-[![Build Status: Ubuntu Focal (Actions)](https://github.com/ros-industrial/abb_librws/workflows/CI%20-%20Ubuntu%20Focal/badge.svg?branch=master)](https://github.com/ros-industrial/abb_librws/actions?query=workflow%3A%22CI+-+Ubuntu+Focal%22)
-[![Github Issues](https://img.shields.io/github/issues/ros-industrial/abb_librws.svg)](http://github.com/ros-industrial/abb_librws/issues)
-
 [![license - bsd 3 clause](https://img.shields.io/:license-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 [![support level: community](https://img.shields.io/badge/support%20level-community-lightgray.svg)](http://rosindustrial.org/news/2016/10/7/better-supporting-a-growing-ros-industrial-software-platform)
 
 ## Important Notes
 
-RobotWare versions `7.0` and higher are currently incompatible with *abb_librws* (due to RWS `1.0` being replaced by RWS `2.0`). See [this](http://developercenter.robotstudio.com/webservice) for more information about the different RWS versions.
-
-Pull request [abb_librws#69](https://github.com/ros-industrial/abb_librws/pull/69) turned this package from a Catkin package into a plain CMake package. ROS users may use any of the following build tools to build the library:
-
-* ROS 1: `catkin_make_isolated` or [catkin_tools](https://catkin-tools.readthedocs.io/en/latest/index.html).
-* ROS 2: [colcon](https://colcon.readthedocs.io/en/released/).
+RobotWare main versions `6.x` and `7.x` are currently supported. 
 
 ## Overview
 
-A C++ library for interfacing with ABB robot controllers supporting *Robot Web Services* (RWS) `1.0`. See the online [documentation](http://developercenter.robotstudio.com/webservice/api_reference) for a detailed description of what RWS `1.0` is and how to use it.
+A C++ library for interfacing with ABB robot controllers supporting *Robot Web Services* (RWS) `1.0` (for RobotWare `6.x`) and *Robot Web Services* (RWS) `2.0` (for RobotWare `7.x`).  
+Refer to the online [RWS 1.0 documentation](http://developercenter.robotstudio.com/webservice/api_reference) and [RWS 2.0 documentation](https://developercenter.robotstudio.com/api/RWS?urls.primaryName=Introduction) for a detailed description of what RWS is and how to use it.
 
-* See [abb_libegm](https://github.com/ros-industrial/abb_libegm) for a companion library that interfaces with *Externally Guided Motion* (EGM).
-* See StateMachine Add-In ([1.0](https://robotapps.robotstudio.com/#/viewApp/7fa7065f-457f-47ce-98d7-c04882e703ee) or [1.1](https://robotapps.robotstudio.com/#/viewApp/c163de01-792e-4892-a290-37dbe050b6e1)) for an optional *RobotWare Add-In* that can be useful when configuring an ABB robot controller for use with this library.
+Usage differs depending on how the `RWSInterface` constructor is instantiated:
+
+- **For RWS 1.0:** only the robot’s IP address is required.  
+- **For RWS 2.0:** in addition to the IP address, a `Poco::Net::Context` object must be provided, defined as follows:
+
+```cpp
+Poco::Net::Context::Ptr pContext =
+    new Poco::Net::Context(
+        Poco::Net::Context::CLIENT_USE, 
+        "", 
+        "", 
+        "", 
+        Poco::Net::Context::VERIFY_NONE
+    );
+```
+
+Explanation of Parameters:
+
+- `Poco::Net::Context::CLIENT_USE` — Creates an SSL context for a client (C++) connecting to a server (the robot).
+- `""` (privateKeyFile) — No client private key.
+- `""` (certificateFile) — No client certificate.
+- `""` (caLocation) — No certificate authority bundle.
+- `Poco::Net::Context::VERIFY_NONE` — Disables all TLS certificate verification on the client side.
+
+Instantiating the relevant constructor automatically connects to the robot using the default ports:
+
+- port **80** for RWS 1.0
+- port **443** for RWS 2.0
+
+If, when using RWS 2.0, the connection fails, check which port the controller is actually listening on.
+You can force port **443** by editing:
+
+`C:\Users\<user>\AppData\Local\ABB\RobotWare\RobotControl_7.xx.x\system\appweb.conf`
+
+and setting:
+
+`ListenSecure 443`
+
+For RWS 2.0, mastership is required for write operations (and must be released immediately after the write).
+To check in detail which operations require mastership, refer to the **RWS 2.0 documentation** linked above, look for the **“Mastership is required”** note within the function descriptions.
 
 Please note that this package has not been productized, it is provided "as-is" and only limited support can be expected.
 
@@ -34,7 +64,7 @@ The following is a conceptual sketch of how this RWS library can be viewed, in r
 
 ### Requirements
 
-* RobotWare version `6.0` or higher (less than `7.0`, which uses RWS `2.0`).
+* RobotWare version `6.x` (for RWS `1.0`) or `7.x` (for RWS `2.0`).
 
 ### Dependencies
 
@@ -55,10 +85,12 @@ RWS provides access to several services and resources in the robot controller, a
 * Register as a local/remote user (e.g. for interaction during manual mode).
 * Turning the motors on/off.
 * Reading of current RobotWare version and available tasks in the robot system.
+*	Enable/disable lead-through.
+*	Access to SmartGripper functionality.
 
 ### Recommendations
 
-* This library has been verified to work with RobotWare `6.08.00.01`. Other versions are expected to work, but this cannot be guaranteed at the moment.
+* This library has been verified to work with RobotWare `6.15.01` and `7.18.2`. Other versions are expected to work, but this cannot be guaranteed at the moment.
 * It is a good idea to perform RobotStudio simulations before working with a real robot.
 * It is prudent to familiarize oneself with general safety regulations (e.g. described in ABB manuals).
 * Consider cyber security aspects, before connecting robot controllers to networks.
@@ -96,19 +128,4 @@ See the Add-In's user manual ([1.0](https://robotapps.blob.core.windows.net/appr
 
 ## Acknowledgements
 
-The **core development** has been supported by the European Union's Horizon 2020 project [SYMBIO-TIC](http://www.symbio-tic.eu/).
-The SYMBIO-TIC project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement no. 637107.
-
-<img src="docs/images/symbio_tic_logo.png" width="250">
-
-The **open-source process** has been supported by the European Union's Horizon 2020 project [ROSIN](http://rosin-project.eu/).
-The ROSIN project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement no. 732287.
-
-<img src="docs/images/rosin_logo.png" width="250">
-
-The opinions expressed reflects only the author's view and reflects in no way the European Commission's opinions.
-The European Commission is not responsible for any use that may be made of the contained information.
-
-### Special Thanks
-
-Special thanks to [gavanderhoorn](https://github.com/gavanderhoorn) for guidance with open-source practices and ROS-Industrial conventions.
+This work is based on the [abb_librws](https://github.com/ros-industrial/abb_librws) classes developed by Jon Tjerngren for ABB IRC5 controllers (for RWS `1.0`, running RobotWare `6.x`) and on the [abb_librws](https://github.com/JOiiNT-LAB/abb_wrapper/tree/master/abb_librws) classes developed by JOiiNT-LAB for ABB controllers (for RWS `2.0`, running RobotWare `7.x`).
